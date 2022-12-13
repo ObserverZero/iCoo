@@ -1,0 +1,7 @@
+{
+  "name": "icoo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
