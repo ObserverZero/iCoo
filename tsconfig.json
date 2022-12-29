@@ -15,6 +15,7 @@
       "webpack-env",
       "jest"
     ],
+    "noImplicitAny": false,
     "paths": {
       "@/*": [
         "src/*"
@@ -36,5 +37,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "noImplicitAny": false,
 }

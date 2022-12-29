@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Monday Meeting",
+    "description": "Meeting with all the memebers of XR",
+    "start_date": "2023-01-01",
+    "end_date": "2023-01-01",
+    "location": "Greenhouse"
+  },
+  {
+    "id": 2,
+    "name": "Flea Market",
+    "description": "Flea Market at the Anker Brigde",
+    "start_date": "2023-01-02",
+    "end_date": "2023-01-02",
+    "location": "Ankerbroen"
+  },
+  {
+    "id": 3,
+    "name": "Crashing Equinor",
+    "description": "Crash Equinor's party",
+    "start_date": "2023-02-08",
+    "end_date": "2023-02-08",
+    "location": "Equinor, Fornebu"
+  }
+]

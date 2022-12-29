@@ -1,0 +1,6 @@
+docker run \
+    --mount type=bind,src=/Users/observerzero/data,dst=/data \
+    -e SYNAPSE_SERVER_NAME=home.icoo.org \
+    -e SYNAPSE_REPORT_STATS=yes \
+    -p 8008:8008 \
+    matrixdotorg/synapse:latest
