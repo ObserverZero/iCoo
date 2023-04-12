@@ -15,6 +15,10 @@ import {
   IonCardTitle,
 } from '@ionic/vue';
 
+import {useMatrixClient} from "@/stores/MatrixClient";
+
+let client = useMatrixClient();
+
 export default {
   name: "CalendarItem",
   components: {IonCard, IonCardHeader, IonCardTitle,},

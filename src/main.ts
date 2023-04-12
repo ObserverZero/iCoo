@@ -1,9 +1,9 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import {createPinia} from 'pinia'
+import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router';
 
-import { IonicVue } from '@ionic/vue';
+import {IonicVue} from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -21,13 +21,18 @@ import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
+/* Virtual Scroller */
+import VueVirtualScroller from 'vue-virtual-scroller';
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
+
 /* Theme variables */
 import './theme/variables.css';
 
 const app = createApp(App)
+  .use(createPinia())
   .use(IonicVue)
   .use(router)
-  .use(createPinia())
+  .use(VueVirtualScroller)
 
 router.isReady().then(() => {
   app.mount('#app');

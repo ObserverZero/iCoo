@@ -1,40 +1,84 @@
-<template>
+<template id="yeah">
   <IonPage>
-    <IonHeader>
-      <IonToolbar>
-        <IonTitle>Calendar</IonTitle>
-      </IonToolbar>
-    </IonHeader>
     <IonContent :fullscreen="true">
 
-      <IonList v-for="(value, name) in groups" :key="name">
-        <CalendarItem :name="value.name" :id="value.id"/>
+      <IonList>
+        <IonItem>Coming up!</IonItem>
+        <IonItem>Coming up!</IonItem>
+        <IonItem>Coming up!</IonItem>
+        <IonItem>Coming up!</IonItem>
+        <IonItem>Coming up!</IonItem>
+        <IonItem>Coming up!</IonItem>
       </IonList>
 
     </IonContent>
   </IonPage>
+
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, } from '@ionic/vue';
-import { useMatrixClient } from '../stores/MatrixClient.js';
-import CalendarItem from "@/components/CalendarItem.vue";
+/* eslint-disable vue/no-unused-components */
+import {defineComponent, reactive} from 'vue';
+import {
+  IonPage,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  modalController,
+  IonButton,
+  IonMenu,
+  IonMenuToggle,
+  IonIcon,
+  IonMenuButton,
+  IonThumbnail,
+  IonButtons,
+  IonItem,
+}
+  from '@ionic/vue';
+import {useMatrixClient} from '../stores/MatrixClient.js';
+import MainMenu from '@/menus/MainMenu.vue';
+import {menu, close, search, personCircle, addCircle} from 'ionicons/icons';
+
+// TODO - Ranking functionality of group membership to curate what appears on top of the list on group profile
 
 const client = useMatrixClient()
-let groups = reactive({})
-
-setInterval(() => {
-  Object.assign(groups, client.getGroups())
-}, 1000)
 
 export default defineComponent({
+  /* eslint-disable vue/no-unused-components */
   name: 'CalendarPage',
-  components: {CalendarItem, IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonList, },
+  components: {
+    IonContent,
+    IonPage,
+    IonList,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButton,
+    IonButtons,
+    IonIcon,
+    IonMenu,
+    IonMenuToggle,
+    IonMenuButton,
+    IonItem,
+  },
   data() {
+    return {}
+  },
+  setup() {
     return {
-      groups: groups,
+      menu,
+      close,
+      personCircle,
+      search,
+      addCircle,
     }
+  },
+  methods: {
   },
 });
 </script>
+
+<style scoped>
+</style>

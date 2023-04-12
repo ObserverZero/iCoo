@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
+import {createRouter, createWebHistory} from '@ionic/vue-router';
+import {RouteRecordRaw} from 'vue-router';
 import TabsPage from '../views/TabsPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/tabs/calendar'
+    redirect: '/tabs/groups'
   },
   {
     path: '/tabs/',
@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '',
-        redirect: '/tabs/calendar'
+        redirect: '/tabs/groups'
       },
       {
         path: 'calendar',
@@ -24,9 +24,33 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/Groups.vue')
       },
       {
+        path: 'group/:id',
+        component: () => import('@/views/Group.vue')
+      },
+      {
+        path: 'myprofile',
+        component: () => import('@/views/MyProfile.vue')
+      },
+      {
+        path: 'notifications',
+        component: () => import('@/views/Notifications.vue')
+      },
+      {
         path: 'people',
         component: () => import('@/views/People.vue')
-      }
+      },
+      {
+        path: 'profile/:id',
+        component: () => import('@/views/Profile.vue')
+      },
+      {
+        path: 'tabs',
+        component: () => import('@/views/TabsPage.vue')
+      },
+      {
+        path: 'welcome',
+        component: () => import('@/views/WelcomePage.vue')
+      },
     ]
   }
 ]
