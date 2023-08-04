@@ -138,13 +138,16 @@ export default defineComponent({
       document.getElementById('bottomInput').value = ''
     },
     async fetchData() {
-      this.alternateTimeline = await client.getTimeline(this.$props.message.id)
+      this.alternateTimeline = await client.getTimeline(
+        this.$props.message.id)
       console.log(this.alternateTimeline)
       setInterval(async () => {
-        this.alternateTimeline = await client.getTimeline(this.$props.message.id)
+        this.alternateTimeline = await client.getTimeline(
+          this.$props.message.id)
         this.updated = await client.updateChat(this.$props.message.id)
       }, 1000)
-      this.alternateTimeline = await client.getTimeline(this.$props.message.id)
+      this.alternateTimeline = await client.getTimeline(
+        this.$props.message.id)
       return
     },
     sendAndFetch() {

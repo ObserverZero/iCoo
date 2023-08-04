@@ -1,7 +1,7 @@
 <template id="yeah">
   <IonPage>
     <IonHeader>
-      <p style="padding-top: 1.2em;"/>
+      <p style="padding-top: 1.2em"/>
     </IonHeader>
     <IonContent :fullscreen="true">
 
@@ -11,12 +11,11 @@
 
     </IonContent>
   </IonPage>
-
 </template>
 
 <script lang="ts">
 /* eslint-disable vue/no-unused-components */
-import {defineComponent, reactive} from 'vue';
+import {defineComponent, reactive} from 'vue'
 import {
   IonPage,
   IonHeader,
@@ -31,13 +30,19 @@ import {
   IonIcon,
   IonMenuButton,
   IonThumbnail,
-  IonButtons, IonCardContent,
-}
-  from '@ionic/vue';
-import {useMatrixClient} from '../stores/MatrixClient.js';
-import ProfileItem from "@/components/ProfileItem.vue";
-import Profile from "@/views/MyProfile.vue";
-import {menu, close, search, personCircle, addCircle} from 'ionicons/icons';
+  IonButtons,
+  IonCardContent,
+} from '@ionic/vue'
+import {useMatrixClient} from '../stores/MatrixClient.js'
+import ProfileItem from "@/components/ProfileItem.vue"
+import Profile from "@/views/MyProfile.vue"
+import {
+  menu,
+  close,
+  search,
+  personCircle,
+  addCircle
+} from 'ionicons/icons'
 
 // TODO - Ranking functionality of group membership to curate what appears on top of the list on group profile
 // TODO - Facebook's relationhsip status equivalent - am I available for work
@@ -50,17 +55,7 @@ let peopleArray = []
 setInterval(async () => {
   peopleArray = await client.getAllUsers()
   Object.assign(people, peopleArray)
-}, 1000)
-
-let oldScrollY = window.scrollY;
-window.onscroll = function (e) {
-  if (oldScrollY < window.scrollY) {
-    console.log("Down")
-  } else {
-    console.log("Up")
-  }
-  oldScrollY = window.scrollY
-}
+}, 2000)
 
 export default defineComponent({
   name: 'PeoplePage',
@@ -75,6 +70,7 @@ export default defineComponent({
     IonButton,
     IonButtons,
     IonIcon,
+    IonCardContent,
   },
   data() {
     return {
@@ -92,7 +88,7 @@ export default defineComponent({
   },
   methods: {
   },
-});
+})
 </script>
 
 <style scoped>

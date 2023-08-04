@@ -1,19 +1,41 @@
-<template id="yeah">
-  <IonPage id="yup">
+<template>
+  <IonPage>
     <IonHeader>
-      <p style="padding-top: 1.2em;"/>
+      <p style="padding-top: 1.4em;"/>
     </IonHeader>
     <IonContent
+      ref="stuff"
       :scroll-events="true">
-    <IonCard>wow</IonCard>
-      <div v-if="content.content === 'list'">
+      <IonItem>
+        <IonSegment
+            value="joined"
+            @ionChange="segmentChanged($event)"
+            v-model="view.value">
+          <IonSegmentButton value="Discover">
+            Discover
+          </IonSegmentButton>
+          <IonSegmentButton value="joined">
+            Joined
+          </IonSegmentButton>
+          <IonSegmentButton value="invites">
+            Invites
+          </IonSegmentButton>
+          <IonSegmentButton value="kickstart">
+            Kickstarters
+          </IonSegmentButton>
+          <IonItem>
+            <IonIcon :icon="menu"/>
+          </IonItem>
+        </IonSegment>
+      </IonItem>
+      <div v-if="view.value == 'joined'">
         <div v-for="(value, name) in groups" :key="name">
           <div v-if="value.type === 'm.space'
-          && value.name !== 'internal_groups'
-          && value.name !== 'board'
-          && value.name !== 'groups'
-          && value.name !== 'chat'
-          && value.name !== 'searchable'">
+                  && value.name !== 'internal_groups'
+                  && value.name !== 'board'
+                  && value.name !== 'groups'
+                  && value.name !== 'chat'
+                  && value.name !== 'searchable'">
             <GroupItem
                 :name="value.name"
                 :id="value.id"
@@ -24,6 +46,32 @@
           </div>
         </div>
       </div>
+      <div v-else-if="view.value == 'kickstart'">
+        <KickstartItem
+          name="Permaculture Sognsvann"
+          id="nope"
+          topic="Starting a permaculture project at Sognsvann. 
+                 Need people who know their shit."
+          handle="permakultursognsvann"
+          href="something"
+          banner="farm"/>
+        <KickstartItem
+          name="Plastic Recycling Grünerløkka"
+          id="yope"
+          topic="Cutting up plastic and melting the shit. 
+                 Need people who like the smell of burning ethylene."
+          handle="recyclegrunerlokka"
+          href="something"
+          banner="factory"/>
+        <KickstartItem
+          name="Plastic Recycling Grünerløkka"
+          id="yope"
+          topic="Cutting up plastic and melting the shit. 
+                 Need people who like the smell of burning ethylene."
+          handle="recyclegrunerlokka"
+          href="something"
+          banner="factory"/>
+      </div>
     </IonContent>
     <IonFab slot="fixed" vertical="bottom" horizontal="end">
       <IonFabButton @click="openModal" color="dark">
@@ -33,9 +81,9 @@
   </IonPage>
 </template>
 
-<script lang="ts">
+<script>
 /* eslint-disable vue/no-unused-components */
-import {defineComponent, reactive} from 'vue';
+import {defineComponent, ref, reactive} from 'vue';
 import {
   IonPage,
   IonHeader,
@@ -57,9 +105,12 @@ import {
   IonButtons,
   IonLabel,
   IonCard,
+  IonCardHeader,
   IonSearchbar,
   IonRefresher,
   IonRefresherContent,
+  IonSegment,
+  IonSegmentButton,
 } from '@ionic/vue';
 import {
   arrowBack,
@@ -74,14 +125,16 @@ import {
   caretUp,
   peopleCircle,
   chatbox,
+  calendarClear,
   colorFilter,
   colorFilterSharp,
   clipboard,
 } from 'ionicons/icons';
 import {useMatrixClient} from '../stores/MatrixClient.js';
 import GroupItem from "@/components/GroupItem.vue";
+import KickstartItem from "@/components/KickstartItem.vue";
 import CreateGroupModal from '@/menus/CreateGroupModal.vue';
-import MainMenu from '@/menus/MainMenu.vue';
+import { useScroll } from '@vueuse/core'
 
 // TODO: get checkboxes/buttons to filter chats from tools etc
 // TODO: Groups need to be able to migrate members from one group to another
@@ -90,7 +143,8 @@ import MainMenu from '@/menus/MainMenu.vue';
 
 const client = useMatrixClient()
 
-let content = reactive({content: 'load'})
+let content = reactive({content: 'joined'})
+let view = reactive({value: 'kickstart'})
 let groups = reactive({})
 let group = reactive({
   name: '',
@@ -101,15 +155,11 @@ let group = reactive({
 
 setInterval(() => {
   Object.assign(groups, client.getGroups())
+  console.log(groups)
   if (Object.keys(groups).length !== 0 && content.content !== 'group') {
     content.content = 'list'
   }
 }, 5000)
-
-
-function toolbarClicked() {
-  content.content = 'list'
-}
 
 export default defineComponent({
   name: 'GroupsPage',
@@ -131,6 +181,11 @@ export default defineComponent({
     IonButton,
     IonTitle,
     IonSearchbar,
+    IonCard,
+    IonCardHeader,
+    IonSegment,
+    IonSegmentButton,
+    KickstartItem,
   },
   setup() {
     return {
@@ -148,6 +203,7 @@ export default defineComponent({
       chatbox,
       colorFilterSharp,
       clipboard,
+      calendarClear,
     }
   },
   data() {
@@ -155,6 +211,7 @@ export default defineComponent({
       group: group,
       groups: groups,
       content: content,
+      view: view,
     }
   },
   methods: {
@@ -170,16 +227,15 @@ export default defineComponent({
         console.log("sure thing")
       }
     },
-    handleScrollStart() {
-        console.log('scroll start');
-      },
-    toolbarClicked: toolbarClicked
+    segmentChanged(event) {
+      view.value = event.detail.value;
+      console.log(view.value)
+    },
   },
   created() {
     this.$watch(
       () => this.$route.params,
       () => {
-        window.scroll(0, 50)
         Object.assign(groups, client.getGroups())
         if (Object.keys(groups).length !== 0 && content.content !== 'group') {
           content.content = 'list'

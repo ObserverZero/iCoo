@@ -1,4 +1,5 @@
 <template>
+
   <IonHeader>
     <IonToolbar>
       <IonButtons slot="start">
@@ -7,7 +8,7 @@
       <IonTitle>New Post</IonTitle>
       <IonButtons slot="end">
         <IonButton @click="confirm">
-            <IonIcon :icon="send" color="primary"></IonIcon>
+          <IonIcon :icon="send" color="secondary"></IonIcon>
         </IonButton>
       </IonButtons>
     </IonToolbar>
@@ -17,6 +18,7 @@
       <IonTextarea :autoGrow="true" v-model="topic" placeholder="What's on your mind?"></IonTextarea>
     </IonItem>
   </IonContent>
+
 </template>
 
 <script lang="ts">
@@ -37,8 +39,8 @@ import {
 import {
     send,
 } from 'ionicons/icons'
-import {defineComponent, ref} from 'vue';
-import {useMatrixClient} from '@/stores/MatrixClient.js';
+import { defineComponent, ref } from 'vue';
+import { useMatrixClient } from '@/stores/MatrixClient.js';
 
 const client = useMatrixClient()
 

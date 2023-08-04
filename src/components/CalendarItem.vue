@@ -1,13 +1,13 @@
 <template>
   <IonCard>
     <IonCardHeader>
-      <IonCardTitle>{{ name }}</IonCardTitle>
+      <IonCardTitle>{{ name }} and something else</IonCardTitle>
     </IonCardHeader>
   </IonCard>
 </template>
 
 <script>
-
+/* eslint-disable vue/no-unused-components */
 import {
   IonCard,
   IonCardHeader,

@@ -5,15 +5,29 @@
     </IonHeader>
     <IonContent :fullscreen="true">
       <IonCard>
-        <img alt="Hacker office" src="../../public/assets/banners/hacker_factory_semi_B&W.png"/>
+        <img 
+          alt="Hacker office" 
+          src="../../public/assets/banners/hacker_factory_semi_B&W.png"/>
         <IonCardHeader>
-          <IonAvatar style="margin-left: 33%;margin-top: -7em;stroke-width: 10px;width:35%;">
-            <img alt="Silhouette of a person's head" src="../../public/assets/banners/hacker_soft_colors.png"/>
+          <IonAvatar 
+            style="margin-left: 33%;
+                   margin-top: -7em;
+                   stroke-width: 10px;
+                   width:35%;">
+            <img 
+              alt="Silhouette of a person's head" 
+              src="../../public/assets/banners/hacker_soft_colors.png"/>
           </IonAvatar>
-          <IonCardTitle>{{ globalProfile.displayname }}</IonCardTitle>
-          <IonCardSubtitle>{{ globalProfile.handle }}</IonCardSubtitle>
+          <IonCardTitle>
+            {{ process.env.VUE_APP_NAME }}
+          </IonCardTitle>
+          <IonCardSubtitle>
+            {{ process.env.VUE_APP_NAME }}
+          </IonCardSubtitle>
           <IonCardContent>
-            <div v-for="item in globalProfile.hashtags" v-bind:key="item">
+            <div 
+              v-for="item in globalProfile.hashtags" 
+              v-bind:key="item">
               <IonChip>#{{ item }}</IonChip>
             </div>
             <IonItem>{{ globalProfile.text }}</IonItem>

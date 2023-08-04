@@ -17,6 +17,25 @@
       <IonInput v-model="name" placeholder="Name"></IonInput>
       <IonInput v-model="topic" placeholder="Description"></IonInput>
     </IonItem>
+    <IonItem>
+      <IonCheckbox v-model="checkedEvent"/>
+        <IonLabel>This is an Event</IonLabel>
+    </IonItem>
+    <div v-if="checkedEvent">
+      <IonDatetime/>
+      <IonDatetime/>
+    </div>
+    <IonItem>
+      <IonCheckbox v-model="checkedKickstarters"/>
+      <IonLabel>Announce on Kickstarters</IonLabel>
+    </IonItem>
+    <IonItem>
+      <div v-if="checkedKickstarters">
+        <IonTextarea
+          :auto-grow="true" 
+          placeholder="Tell us about it"/>
+      </div>
+    </IonItem>
   </IonContent>
 </template>
 
@@ -34,6 +53,8 @@ import {
   IonInput,
   modalController,
   IonCheckbox,
+  IonDatetime,
+  IonTextarea,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import {useMatrixClient} from '@/stores/MatrixClient.js';
@@ -53,12 +74,17 @@ export default defineComponent({
     IonButton,
     IonItem,
     IonLabel,
-    IonInput
+    IonInput,
+    IonCheckbox,
+    IonDatetime,
+    IonTextarea,
   },
   data() {
     return {
       name: '',
       topic: '',
+      checkedKickstarters: false,
+      checkedEvent: false,
     };
   },
   props: {

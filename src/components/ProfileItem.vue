@@ -14,12 +14,19 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCardContent,
   IonItem,
 } from '@ionic/vue';
 
 export default {
   name: "GroupItem",
-  components: {IonItem, IonCard, IonCardHeader, IonCardTitle,},
+  components: {
+    IonItem, 
+    IonCard, 
+    IonCardHeader, 
+    IonCardTitle,
+    IonCardContent,
+  },
   props: {
     profile: Object,
   },

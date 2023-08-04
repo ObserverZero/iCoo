@@ -1,5 +1,6 @@
 <template @click="onClick">
   <IonCard>
+    Added today!
     <div v-if="topic.banner != Object">
       <img alt="hacker factory" :src="getImgUrl(banner)"/>
     </div>
@@ -28,7 +29,7 @@ let content = ref('')
 
 
 export default {
-  name: "GroupItem",
+  name: "KickstartItem",
   setup() {
     return {
       planet,

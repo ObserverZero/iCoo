@@ -6,7 +6,7 @@
         <IonItem>
           <IonButton fill="clear" href="/tabs/myprofile" size="large">
             <img id="avatarMenu" alt="Silhouette of a person's head" src="../../public/assets/banners/hacker_soft_colors.png"/>
-            <IonLabel style="padding-left: .5em;">{{ globalProfile.handle }}</IonLabel>
+            <!-- <IonLabel style="padding-left: .5em;">{{ globalProfile.handle }}</IonLabel> -->
           </IonButton>
         </IonItem>
         <IonItem>
@@ -45,7 +45,7 @@
           <IonMenuToggle auto-hide="false" slot="start">
             <img id="avatarBar" alt="Silhouette of a person's head" src="../../public/assets/banners/hacker_soft_colors.png"/>
           </IonMenuToggle>
-          <IonTitle><span class="i">¡</span>Coo!</IonTitle>
+          <IonTitle>iCoo</IonTitle>
           <IonButtons slot="end">
             <IonButton>
               <IonIcon :icon="search" color="tertiary" size="large"/>
@@ -122,52 +122,8 @@ import {
 import sdk, {EventType} from 'matrix-js-sdk'
 import { convertCompilerOptionsFromJson } from 'typescript'
 
-const loginCreds = {
-  //accessToken: "syt_b2JzZXJ2ZXJ6ZXJv_qbsSNMdGRZpXMsNvXJeX_3OODDh",
-  accessToken: process.env.VUE_APP_TOKEN,
-  userId: process.env.VUE_APP_NAME,
-  baseUrl: 'http://localhost:8008'
-}
-
-const client = sdk.createClient({
-  baseUrl: loginCreds.baseUrl,
-  accessToken: loginCreds.accessToken,
-  userId: loginCreds.userId,
-})
-
-function getHandleFromUserId() {
-  return loginCreds.userId.replace(/:.*/, '')
-}
-
-async function getOwnProfile() {
-  let responseFromServer = await client.getProfileInfo(loginCreds.userId)
-  responseFromServer.handle = getHandleFromUserId()
-  responseFromServer.displayname = JSON.parse(responseFromServer.displayname)
-  return responseFromServer
-}
-
-let globalProfile = reactive({
-  handle: '',
-  displayname: '',
-  hashtags: [],
-  text: '',
-})
-
-async function getProfile() {
-  let profile ={}
-  setInterval(async () => {
-    profile = await getOwnProfile()
-    globalProfile.handle = profile.handle
-    globalProfile.displayname = profile.displayname.name
-    globalProfile.hashtags = profile.displayname.hashtags
-    globalProfile.text = profile.displayname.text
-  }, 3000)
-  return profile
-}
-
-//getProfile()
-// TODO: switch logo for a search bar with the logo name inside as suggested text
-// TODO: get rid of menu button and replace with the avatar for same function.
+//// TODO: switch logo for a search bar with the logo name inside as suggested text
+//// TODO: get rid of menu button and replace with the avatar for same function.
 
 export default defineComponent({
   name: 'TabsPage',
@@ -198,12 +154,12 @@ export default defineComponent({
     switchable = "nope"
     let joinedSearchable = false;
     let profile = ref('')
-    profile = getOwnProfile()
+    //profile = getOwnProfile()
     return {
       joinedSearchable,
       profile,
       switchable,
-      globalProfile,
+      //globalProfile,
     }
   },
   setup() {
@@ -225,7 +181,7 @@ export default defineComponent({
   },
   methods: {
     fetchData() {
-      this.profile = getProfile()
+      //this.profile = getProfile()
     },
     switchData() {
       if (this.switchable === "nope") {
@@ -235,18 +191,16 @@ export default defineComponent({
       }
     }
   },
-//  created() {
-//    this.$watch(
-//        () => this.$route.params,
-//        () => {
-//          setInterval(() => {
-//            this.fetchData()
-//            this.switchData()
-//          }, 3000)
-//        },
-//        {immediate: true}
-//    )
-//  },
+  created() {
+    this.$watch(
+        () => this.$route.params,
+        () => {
+            this.fetchData()
+            this.switchData()
+        },
+        {immediate: true}
+    )
+  },
 });
 </script>
 <style scoped>
@@ -265,3 +219,4 @@ export default defineComponent({
   border-radius: 1em;
 }
 </style>
+

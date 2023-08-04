@@ -1,4 +1,4 @@
-<template id="yeah">
+<template itd="yeah">
   <IonPage ref="page">
     <IonHeader>
       <p style="padding-top: 1.2em;"/>
@@ -31,7 +31,7 @@
       </IonCard>
 
       <div v-if="content.content === 'chat'">
-        <ChatSpace :messages="messages" :groupId="address"/>
+        <ChatSpace :messages="messages"/>
       </div>
       <div v-else-if="content.content === 'board'">
         <BoardSpace/>
@@ -39,7 +39,6 @@
       <div v-else-if="content.content === 'groups'">
         <GroupSpace :groups="groups"/>
       </div>
-
 
     </IonContent>
   </IonPage>
@@ -128,7 +127,7 @@ export default defineComponent({
     })
     let messages = ref({})
     let groups = ref({})
-    address = "!" + this.$route.params.id + ":home.parecon.work"
+    address = "!" + this.$route.params.id + ":matrix.icoo.org"
     return {
       room,
       content,
@@ -180,9 +179,6 @@ export default defineComponent({
       var images = require.context('../../public/assets/banners', false, /\.png$/)
       return images('./' + bannerName + ".png")
     },
-    yup() {
-      let huh = client.createRealGroup("so")
-    },
     async openModal() {
       const modal = await modalController.create({
         component: ChatModal,
@@ -196,7 +192,7 @@ export default defineComponent({
       this.content.content = event.detail.value;
     },
     async fetchData() {
-      const id = "!" + this.$route.params.id + ":home.parecon.work";
+      const id = "!" + this.$route.params.id + ":matrix.icoo.org";
       setInterval(async () => {
         try {
           this.room = await client.getRoomById(id)
@@ -205,6 +201,7 @@ export default defineComponent({
           children = client.getGroupContent(address)
           this.messages = client.getChatContent(id)
           this.groups = client.getSubgroupContent(id)
+          console.log(this.messages)
         } catch {
           return
         }

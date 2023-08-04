@@ -40,6 +40,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/People.vue')
       },
       {
+        path: 'kickstarters/:id',
+        component: () => import('@/views/KickstartArticle.vue')
+      },
+      {
         path: 'profile/:id',
         component: () => import('@/views/Profile.vue')
       },

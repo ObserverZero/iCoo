@@ -1,26 +1,16 @@
 <template ref="chatSpace">
 
-  <div v-if="JSON.stringify(this.messages.children) == '{}'">
-    <IonCard>
-      <IonCardHeader>
-        <IonCardSubtitle>Noone:</IonCardSubtitle>
-        <IonCardSubtitle>How much conversation!</IonCardSubtitle>
-        <IonCardSubtitle>You:</IonCardSubtitle>
-        <IonCardSubtitle></IonCardSubtitle>
-      </IonCardHeader>
-    </IonCard>
-  </div>
-  <div v-else>
+<div v-if="messages != undefined">
   <div v-for="value in messages.children" v-bind:key="value">
     <ChatItem :message="value"/>
   </div>
 </div>
 
-  <IonFab slot="fixed" vertical="bottom" horizontal="end">
-    <IonFabButton color="dark" @click="openModal">
-      <IonIcon :icon="chatbox"></IonIcon>
-    </IonFabButton>
-  </IonFab>
+<IonFab slot="fixed" vertical="bottom" horizontal="end">
+  <IonFabButton color="dark" @click="openModal">
+    <IonIcon :icon="chatbox"></IonIcon>
+  </IonFabButton>
+</IonFab>
 
 </template>
 
@@ -70,7 +60,7 @@ import {
 import ChatItem from "@/components/ChatItem.vue";
 import {defineComponent, reactive, ref} from 'vue';
 import { useMatrixClient } from "@/stores/MatrixClient";
-import {useCrossPage} from "@/stores/CrossPageUpdates";
+import { useCrossPage } from "@/stores/CrossPageUpdates";
 import CreateChatModal from "@/menus/CreateChatModal.vue";
 import ChatBubble from "@/components/ChatBubble.vue";
 
@@ -88,7 +78,6 @@ export default {
       add,
       chatbox,
       noContent,
-      chatBubbleText: "I just think that sometimes I just really wanna get to mars you know kind of or in a way that this room could be like this small spaceship and really take me away to mars",
     }
   },
   setup() {
@@ -124,29 +113,29 @@ export default {
     messages: Object,
   },
   methods: {
-
     async fetchData() {
-      //content.value.creator = content.value.creator.replace(/:.*/, '')
+      return 
     },
-
     async openModal() {
       const modal = await modalController.create({
         component: CreateChatModal,
         componentProps: {
-          chatSpaceId: this.messages.id,
+          chatSpaceId: this.$props.messages.id,
         }
       });
-      return await modal.present();
+      await modal.present();
+      const {data, role} = await modal.onWillDismiss();
     },
-  },
 
+  },
   created() {
     this.$watch(
       () => this.$route.params,
       () => {
         this.fetchData()
         setInterval(async () => {
-          return
+          console.log(this.$props.messages)
+          console.log("fetching data")
         }, 2000);
       },
       // fetch the data when the view is created and the data is
