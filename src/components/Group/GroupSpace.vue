@@ -1,13 +1,14 @@
 <template>
   <SmallGroupItem name="Nothing to be done" topic="Emptyness. Nothing to be done."/>
 
+  <div>{{ groups }}</div>
+
   <IonFab slot="fixed" vertical="bottom" horizontal="end">
-    <IonFabButton color="dark" @click="openModal">
+    <IonFabButton color="dark" @click="createSomeSubgroup">
       <IonIcon :icon="calendarClear"></IonIcon>
     </IonFabButton>
   </IonFab>
 </template>
-
 
 <script>
 /* eslint-disable vue/no-unused-components */
@@ -30,6 +31,7 @@ import { chatbox, calendarClear } from 'ionicons/icons';
 import SmallGroupItem from '@/components/SmallGroupItem.vue'
 import CreateSubGroupModal from '@/menus/CreateSubGroupModal.vue'
 
+const client = useMatrixClient()
 
 export default {
   name: "GroupSpace",
@@ -63,6 +65,9 @@ export default {
         }
       });
       return await modal.present();
+    },
+    async createSomeSubgroup() {
+      client.createSubGroup("something ado", this.groups.id)
     },
   }
 }

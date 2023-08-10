@@ -1,0 +1,5 @@
+/**
+ * @license
+ * Copyright (c) 2023 Handsoncode. All rights reserved.
+ */
+export declare function objectDestroy(object: any): void;

@@ -26,7 +26,6 @@
     "pinia": "^2.0.28",
     "vue": "^3.2.21",
     "vue-router": "^4.0.12",
-    "vue-swing": "^0.0.10",
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "vuejs-spreadsheet": "^2.2.1"
   },

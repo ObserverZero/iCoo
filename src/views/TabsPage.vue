@@ -5,37 +5,40 @@
         <IonItem></IonItem>
         <IonItem>
           <IonButton fill="clear" href="/tabs/myprofile" size="large">
-            <img id="avatarMenu" alt="Silhouette of a person's head" src="../../public/assets/banners/hacker_soft_colors.png"/>
-            <!-- <IonLabel style="padding-left: .5em;">{{ globalProfile.handle }}</IonLabel> -->
+            <img
+              id="avatarMenu"
+              alt="Silhouette of a person's head"
+              src="../../public/assets/banners/hacker_soft_colors.png"
+            />
           </IonButton>
         </IonItem>
         <IonItem>
           <IonButton fill="clear" href="/tabs/profile" size="large">
-            <IonIcon :icon="logIn" size="large"/>
-            <IonLabel style="padding-left: .5em;">Log In</IonLabel>
+            <IonIcon :icon="logIn" size="large" />
+            <IonLabel style="padding-left: 0.5em">Log In</IonLabel>
           </IonButton>
         </IonItem>
         <IonItem>
           <IonButton fill="clear" href="/tabs/profile" size="large">
-            <IonIcon :icon="logOut" size="large"/>
-            <IonLabel style="padding-left: .5em;">Log Out</IonLabel>
+            <IonIcon :icon="logOut" size="large" />
+            <IonLabel style="padding-left: 0.5em">Log Out</IonLabel>
           </IonButton>
         </IonItem>
         <IonItem>
           <IonButton fill="clear" href="/tabs/profile" size="large">
-            <IonIcon :icon="chatbox" size="large"/>
-            <IonLabel style="padding-left: .5em;">Messages</IonLabel>
+            <IonIcon :icon="chatbox" size="large" />
+            <IonLabel style="padding-left: 0.5em">Messages</IonLabel>
           </IonButton>
         </IonItem>
         <IonItem>
           <IonButton fill="clear" href="/tabs/profile" size="large">
-            <IonIcon :icon="cog" size="large"/>
-            <IonLabel style="padding-left: .5em;">Settings</IonLabel>
+            <IonIcon :icon="cog" size="large" />
+            <IonLabel style="padding-left: 0.5em">Settings</IonLabel>
           </IonButton>
         </IonItem>
         <IonItem>
           <IonToggle :checked="joinedSearchable"></IonToggle>
-            <IonLabel style="padding-left: .5em;">Searchable</IonLabel>
+          <IonLabel style="padding-left: 0.5em">Searchable</IonLabel>
         </IonItem>
       </IonContent>
     </IonMenu>
@@ -43,15 +46,19 @@
       <div id="main-content">
         <IonToolbar>
           <IonMenuToggle auto-hide="false" slot="start">
-            <img id="avatarBar" alt="Silhouette of a person's head" src="../../public/assets/banners/hacker_soft_colors.png"/>
+            <img
+              id="avatarBar"
+              alt="Silhouette of a person's head"
+              src="../../public/assets/banners/hacker_soft_colors.png"
+            />
           </IonMenuToggle>
           <IonTitle>iCoo</IonTitle>
           <IonButtons slot="end">
             <IonButton>
-              <IonIcon :icon="search" color="tertiary" size="large"/>
+              <IonIcon :icon="search" color="tertiary" size="large" />
             </IonButton>
             <IonButton href="/tabs/notifications">
-              <IonIcon :icon="notifications" color="tertiary"/>
+              <IonIcon :icon="notifications" color="tertiary" />
               <IonBadge slot="end" color="danger">22</IonBadge>
             </IonButton>
           </IonButtons>
@@ -62,15 +69,19 @@
       <IonRouterOutlet></IonRouterOutlet>
       <IonTabBar slot="bottom">
         <IonTabButton tab="calendar" href="/tabs/calendar">
-          <IonIcon :icon="calendarClear" size="large"/>
+          <IonIcon :icon="calendarClear" size="large" />
         </IonTabButton>
 
         <IonTabButton tab="groups" href="/tabs/groups">
-          <IonIcon :icon="colorFilterSharp" size="large"/>
+          <IonIcon :icon="colorFilterSharp" size="large" />
         </IonTabButton>
 
         <IonTabButton tab="people" href="/tabs/people">
-          <IonIcon :icon="peopleCircle" size="large"/>
+          <IonIcon :icon="peopleCircle" size="large" />
+        </IonTabButton>
+
+        <IonTabButton tab="material" href="/tabs/people">
+          <IonIcon :icon="cube" size="large" />
         </IonTabButton>
       </IonTabBar>
     </IonTabs>
@@ -79,7 +90,7 @@
 
 <script>
 /* eslint-disable vue/no-unused-components */
-import {defineComponent, reactive, ref} from 'vue';
+import { defineComponent, reactive, ref } from "vue";
 import {
   IonHeader,
   IonMenu,
@@ -98,14 +109,15 @@ import {
   IonContent,
   IonItem,
   IonSearchbar,
-  IonBadge, 
+  IonBadge,
   IonLabel,
   IonToggle,
-} from '@ionic/vue';
+} from "@ionic/vue";
 import {
   ellipse,
   calendarClear,
   peopleCircle,
+  cube,
   beer,
   menu,
   close,
@@ -113,20 +125,20 @@ import {
   notifications,
   personCircle,
   addCircle,
-  colorFilterSharp, 
-  logIn, 
-  chatbox, 
+  colorFilterSharp,
+  logIn,
+  chatbox,
   cog,
   logOut,
-} from 'ionicons/icons';
-import sdk, {EventType} from 'matrix-js-sdk'
-import { convertCompilerOptionsFromJson } from 'typescript'
+} from "ionicons/icons";
+import sdk, { EventType } from "matrix-js-sdk";
+import { convertCompilerOptionsFromJson } from "typescript";
 
 //// TODO: switch logo for a search bar with the logo name inside as suggested text
 //// TODO: get rid of menu button and replace with the avatar for same function.
 
 export default defineComponent({
-  name: 'TabsPage',
+  name: "TabsPage",
   components: {
     IonHeader,
     IonMenuToggle,
@@ -150,23 +162,24 @@ export default defineComponent({
     IonToggle,
   },
   data() {
-    let switchable = ref('')
-    switchable = "nope"
+    let switchable = ref("");
+    switchable = "nope";
     let joinedSearchable = false;
-    let profile = ref('')
+    let profile = ref("");
     //profile = getOwnProfile()
     return {
       joinedSearchable,
       profile,
       switchable,
       //globalProfile,
-    }
+    };
   },
   setup() {
     return {
       ellipse,
       calendarClear,
       peopleCircle,
+      cube,
       personCircle,
       beer,
       search,
@@ -177,7 +190,7 @@ export default defineComponent({
       chatbox,
       cog,
       logOut,
-    }
+    };
   },
   methods: {
     fetchData() {
@@ -185,21 +198,21 @@ export default defineComponent({
     },
     switchData() {
       if (this.switchable === "nope") {
-        this.switchable = "yep"
+        this.switchable = "yep";
       } else {
-        this.switchable = "nope"
+        this.switchable = "nope";
       }
-    }
+    },
   },
   created() {
     this.$watch(
-        () => this.$route.params,
-        () => {
-            this.fetchData()
-            this.switchData()
-        },
-        {immediate: true}
-    )
+      () => this.$route.params,
+      () => {
+        this.fetchData();
+        this.switchData();
+      },
+      { immediate: true },
+    );
   },
 });
 </script>
@@ -211,7 +224,7 @@ export default defineComponent({
 #avatarBar {
   width: 2em;
   margin-left: 1em;
-  margin-top: .4em;
+  margin-top: 0.4em;
   border-radius: 1em;
 }
 #avatarMenu {
@@ -219,4 +232,3 @@ export default defineComponent({
   border-radius: 1em;
 }
 </style>
-

@@ -1,4 +1,3 @@
-
 <template>
   <IonHeader>
     <IonToolbar>
@@ -18,22 +17,20 @@
       <IonInput v-model="topic" placeholder="Description"></IonInput>
     </IonItem>
     <IonItem>
-      <IonCheckbox v-model="checkedEvent"/>
-        <IonLabel>This is an Event</IonLabel>
+      <IonCheckbox v-model="checkedEvent" />
+      <IonLabel>This is an Event</IonLabel>
     </IonItem>
     <div v-if="checkedEvent">
-      <IonDatetime/>
-      <IonDatetime/>
+      <IonDatetime />
+      <IonDatetime />
     </div>
     <IonItem>
-      <IonCheckbox v-model="checkedKickstarters"/>
+      <IonCheckbox v-model="checkedKickstarters" />
       <IonLabel>Announce on Kickstarters</IonLabel>
     </IonItem>
     <IonItem>
       <div v-if="checkedKickstarters">
-        <IonTextarea
-          :auto-grow="true" 
-          placeholder="Tell us about it"/>
+        <IonTextarea :auto-grow="true" placeholder="Tell us about it" />
       </div>
     </IonItem>
   </IonContent>
@@ -55,16 +52,16 @@ import {
   IonCheckbox,
   IonDatetime,
   IonTextarea,
-} from '@ionic/vue';
-import {defineComponent} from 'vue';
-import {useMatrixClient} from '@/stores/MatrixClient.js';
+} from "@ionic/vue";
+import { defineComponent } from "vue";
+import { useMatrixClient } from "@/stores/MatrixClient.js";
 
-const client = useMatrixClient()
+const client = useMatrixClient();
 
-let checked = false
+let checked = false;
 
 export default defineComponent({
-  name: 'CreateGroupModal',
+  name: "CreateGroupModal",
   components: {
     IonContent,
     IonHeader,
@@ -81,8 +78,8 @@ export default defineComponent({
   },
   data() {
     return {
-      name: '',
-      topic: '',
+      name: "",
+      topic: "",
       checkedKickstarters: false,
       checkedEvent: false,
     };
@@ -92,11 +89,11 @@ export default defineComponent({
   },
   methods: {
     cancel() {
-      return modalController.dismiss(null, 'cancel');
+      return modalController.dismiss(null, "cancel");
     },
     confirm() {
-      client.createRealGroup(this.name, this.topic)
-      return modalController.dismiss(this.name, 'confirm');
+      client.createRealGroup(this.name, this.topic);
+      return modalController.dismiss(this.name, "confirm");
     },
   },
 });

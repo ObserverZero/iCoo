@@ -1,24 +1,24 @@
 <template>
-    <div class="walls" :id="id" :style="{ 'margin-left': indent + '.5em' }">
-        <div id="sender">{{ sender }}</div>
-            <div id="textContainer">
-                {{ text }}
-            </div>
-            <div id="reply" @click="reply">Reply</div>
-        <div id="react"></div>
+  <div class="walls" :id="id" :style="{ 'margin-left': indent + '.5em' }">
+    <div id="sender">{{ sender }}</div>
+    <div id="textContainer">
+      {{ text }}
     </div>
-    <div v-if="replying">
-        <div class="replyBox" :style="{'margin-left': indent + '.9em'}">
-            <IonItem lines="none">
-                <IonTextarea :autogrow="true" placeholder="wtf?"></IonTextarea>
-                <IonButtons slot="end">
-                    <IonButton id="send">
-                    <IonIcon :icon="send" color="primary"/>
-                    </IonButton>
-                </IonButtons>
-            </IonItem>
-        </div>
+    <div id="reply" @click="reply">Reply</div>
+    <div id="react"></div>
+  </div>
+  <div v-if="replying">
+    <div class="replyBox" :style="{'margin-left': indent + '.9em'}">
+      <IonItem lines="none">
+        <IonTextarea :autogrow="true" placeholder="wtf?"></IonTextarea>
+        <IonButtons slot="end">
+          <IonButton id="send">
+            <IonIcon :icon="send" color="primary"/>
+          </IonButton>
+        </IonButtons>
+      </IonItem>
     </div>
+  </div>
 </template>
 
 <script>
@@ -46,15 +46,15 @@ import {defineComponent, ref} from 'vue';
 import {useMatrixClient} from "@/stores/MatrixClient";
 
 const client = useMatrixClient()
-let wowsers = {}
 
 let senderClean = ref('')
 
 export default {
   name: "ProfilePage",
   data() {
+    const replying = ref(false)
     return {
-        replying: false,
+        replying,
         send,
     }
   },
