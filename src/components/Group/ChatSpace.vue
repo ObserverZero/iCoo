@@ -1,17 +1,15 @@
 <template ref="chatSpace">
-
-<div v-if="messages != undefined">
-  <div v-for="value in messages.children" v-bind:key="value">
-    <ChatItem :message="value"/>
+  <div v-if="messages != undefined">
+    <div v-for="value in messages.children" v-bind:key="value">
+      <ChatItem :message="value" />
+    </div>
   </div>
-</div>
 
-<IonFab slot="fixed" vertical="bottom" horizontal="end">
-  <IonFabButton color="dark" @click="openModal">
-    <IonIcon :icon="chatbox"></IonIcon>
-  </IonFabButton>
-</IonFab>
-
+  <IonFab slot="fixed" vertical="bottom" horizontal="end">
+    <IonFabButton color="dark" @click="openModal">
+      <IonIcon :icon="chatbox"></IonIcon>
+    </IonFabButton>
+  </IonFab>
 </template>
 
 <script>
@@ -39,7 +37,7 @@ import {
   IonFab,
   IonFabButton,
   IonFabList,
-} from '@ionic/vue';
+} from "@ionic/vue";
 import {
   arrowBack,
   chevronUpCircle,
@@ -56,9 +54,9 @@ import {
   colorFilter,
   colorFilterSharp,
   clipboard,
-} from 'ionicons/icons';
+} from "ionicons/icons";
 import ChatItem from "@/components/ChatItem.vue";
-import {defineComponent, reactive, ref} from 'vue';
+import { defineComponent, reactive, ref } from "vue";
 import { useMatrixClient } from "@/stores/MatrixClient";
 import { useCrossPage } from "@/stores/CrossPageUpdates";
 import CreateChatModal from "@/menus/CreateChatModal.vue";
@@ -66,22 +64,22 @@ import ChatBubble from "@/components/ChatBubble.vue";
 
 let client = useMatrixClient();
 
-let chats = ref({})
+let chats = ref({});
 
 export default {
   name: "ChatSpace",
   data() {
-    let noContent = ref(true)
+    let noContent = ref(true);
     return {
       chats,
       addCircle,
       add,
       chatbox,
       noContent,
-    }
+    };
   },
   setup() {
-    return {}
+    return {};
   },
   components: {
     ChatItem,
@@ -114,38 +112,31 @@ export default {
   },
   methods: {
     async fetchData() {
-      return 
+      return;
     },
     async openModal() {
       const modal = await modalController.create({
         component: CreateChatModal,
         componentProps: {
           chatSpaceId: this.$props.messages.id,
-        }
+        },
       });
       await modal.present();
-      const {data, role} = await modal.onWillDismiss();
+      const { data, role } = await modal.onWillDismiss();
     },
-
   },
   created() {
     this.$watch(
       () => this.$route.params,
       () => {
-        this.fetchData()
-        setInterval(async () => {
-          console.log(this.$props.messages)
-          console.log("fetching data")
-        }, 2000);
+        this.fetchData();
       },
       // fetch the data when the view is created and the data is
       // already being observed
-      { immediate: true }
-    )
+      { immediate: true },
+    );
   },
-}
-
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

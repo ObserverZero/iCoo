@@ -2,10 +2,13 @@
   <IonCard>
     <IonCardHeader>
       <IonItem>
-      <IonAvatar>
-        <img alt="hacker factory" src="../../public/assets/banners/factory.png"/>
-      </IonAvatar>
-      <IonCardTitle style="margin-left: 1em;">{{ name }}</IonCardTitle>
+        <IonAvatar>
+          <img
+            alt="hacker factory"
+            src="../../public/assets/banners/factory.png"
+          />
+        </IonAvatar>
+        <IonCardTitle style="margin-left: 1em">{{ name }}</IonCardTitle>
       </IonItem>
       <IonCardContent>{{ topic }}</IonCardContent>
     </IonCardHeader>
@@ -24,26 +27,26 @@ import {
   IonAvatar,
   IonItem,
   IonLabel,
-} from '@ionic/vue';
-import {planet} from 'ionicons/icons';
+} from "@ionic/vue";
+import { planet } from "ionicons/icons";
 
 export default {
   name: "SmallGroupItem",
   setup() {
     return {
       planet,
-    }
+    };
   },
   components: {
-    IonCardSubtitle, 
-    IonIcon, 
-    IonCard, 
-    IonCardHeader, 
-    IonCardTitle, 
+    IonCardSubtitle,
+    IonIcon,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
     IonCardContent,
     IonAvatar,
     IonItem,
-  IonLabel,
+    IonLabel,
   },
   props: {
     name: String,
@@ -53,12 +56,23 @@ export default {
   },
   methods: {
     onClick() {
-      this.$emit('wow!!!!!', this.id)
-    }
-  }
-}
-
+      this.$emit("wow!!!!!", this.id);
+    },
+  },
+  created() {
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        setInterval(() => {
+          return;
+        }, 2000);
+      },
+      {
+        immediate: true,
+      },
+    );
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

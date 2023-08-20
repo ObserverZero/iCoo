@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import sdk, { EventType } from "matrix-js-sdk";
-import { convertCompilerOptionsFromJson } from "typescript";
 import { getPublicRooms } from "./matrixclient/clientGetters.js";
+import { fiveSecTimeout, tenSecTimeout } from "./matrixclient/helperFunctions";
 
 // Login creds are stored in node environment variables and accessed
 // via the "mode" argument when running the dev server.
@@ -13,7 +13,7 @@ const loginCreds = {
 };
 
 const client = sdk.createClient({
-  baseUrl: loginCreds.network,
+  baseUrl: loginCreds.local,
   accessToken: loginCreds.accessToken,
   userId: loginCreds.userId,
 });
@@ -49,7 +49,7 @@ function listenForNewRooms() {
           console.log(`Joined room: ${childRoomId}`);
         })
         .catch((error) => {
-          console.error(`Error joining room: ${childRoomId}`, error);
+          //console.error(`Error joining room: ${childRoomId}`, error);
         });
     }
   });
@@ -135,7 +135,6 @@ function getRoomFromRoomArray(roomId) {
 async function getRoomById(roomId) {
   try {
     let room = client.getRoom(roomId);
-    console.log(roomId);
     const name = room.name;
     const topic = getRoomTopicFromRoomObject(room);
     const group = {
@@ -185,9 +184,34 @@ function createMessageBoard(messageArray) {
   // Arranges an array of messages into a message board
   // reply structure, returning an object.
   let messageBoard = {};
-  console.log(messageArray);
 
   return;
+}
+
+function functionWithInnerFunctionForRecurrence() {
+  function innerFunction() {
+    try {
+      innerFunction();
+    } catch {
+      innerFunction();
+    }
+  }
+}
+
+async function getAllPublicSpaces() {
+  try {
+    // Step 1: Get a list of all public rooms on the server
+    const publicRooms = await client.publicRooms();
+
+    // Step 2: Filter out rooms that are spaces
+    const publicSpaces = publicRooms.chunk.filter(
+      (room) => room["room_type"] === "m.space",
+    );
+    return publicSpaces;
+  } catch (error) {
+    //console.error("Error retrieving public spaces:", error);
+    return [];
+  }
 }
 
 async function autoJoinNewRoomsInSpace() {
@@ -205,13 +229,13 @@ async function autoJoinNewRoomsInSpace() {
             console.log(`Joined room: ${childRoomId}`);
           })
           .catch((error) => {
-            console.error(`Error joining room: ${childRoomId}`, error);
+            //console.error(`Error joining room: ${childRoomId}`, error);
           });
       }
     });
     console.log("Listening for new rooms in spaces to auto-join...");
   } catch (error) {
-    console.error("Error:", error);
+    //console.error("Error:", error);
   }
 }
 
@@ -225,7 +249,6 @@ function getChildrenIds(spaceId) {
     return [];
   }
   let childrenIdArray = Array.from(childrenMap.keys());
-  console.log(childrenIdArray);
   return childrenIdArray;
 }
 
@@ -236,8 +259,16 @@ function getChildren(spaceId) {
     roomObjects.push(client.getRoom(id));
   });
   joinRooms(roomObjects);
-  console.log(roomObjects);
   return roomObjects;
+}
+
+async function asyncGetGroupContent(groupId) {
+  let content = {};
+  let groups = getChildren(groupId);
+  let name;
+  let id;
+  let children;
+  let idAndTopicObject = {};
 }
 
 function getGroupContent(groupId) {
@@ -254,6 +285,9 @@ function getGroupContent(groupId) {
       try {
         children = getChildren(id);
       } catch (error) {
+        content[name] = {
+          id: id,
+        };
         return;
       }
       idAndTopicObject = {};
@@ -266,6 +300,8 @@ function getGroupContent(groupId) {
             creator: creator.event.content.creator.replace(/:.*/, ""),
             topic: getRoomTopicFromRoomObject(item),
             content: getRoomTimeline(item.roomId),
+            href:
+              "/tabs/group/" + item.roomId.replace(/:.*/, "").replace(/!/, ""),
           };
         } catch (error) {
           return;
@@ -282,13 +318,11 @@ function getGroupContent(groupId) {
 
 function getChatContent(groupId) {
   let content = getGroupContent(groupId);
-  console.log("content: ", content);
   return content.chat;
 }
 
 function getSubgroupContent(groupId) {
   let content = getGroupContent(groupId);
-  console.log("content: ", content);
   return content.groups;
 }
 
@@ -331,26 +365,10 @@ function getGroups() {
     });
   }
   Object.assign(roomNamesAndIdsAsObject, roomProduct);
-  console.log(rooms);
   return roomNamesAndIdsAsObject;
 }
 
 function filterGroupsWithTimestamps(groups) {
-  return;
-}
-
-async function createSubSpace(
-  parentSpaceId,
-  subSpaceName,
-  subSpaceTopic,
-  roomId,
-  subspaceTopic,
-) {
-  client.sendStateEvent(roomId, "m.space.parent", {
-    via: ["matrix.icoo.org"],
-    state_key: parentSpaceId,
-    canonical: true,
-  });
   return;
 }
 
@@ -378,6 +396,12 @@ async function createSpace(groupName, topic, visibility = "public") {
             users_default: 100,
           },
         },
+        {
+          type: "m.room.join_rules,",
+          content: {
+            join_rule: "public",
+          },
+        },
       ],
     })
     .then((response) => {
@@ -385,7 +409,7 @@ async function createSpace(groupName, topic, visibility = "public") {
       return response.room_id;
     })
     .catch((error) => {
-      console.error(`Error creating room: ${error}`);
+      //console.error(`Error creating room: ${error}`);
     });
   return returnValue;
 }
@@ -410,7 +434,7 @@ async function createRoom(roomName, topic) {
       return response.room_id;
     })
     .catch((error) => {
-      console.error(`Error creating room: ${error}`);
+      //console.error(`Error creating room: ${error}`);
     });
   return returnValue;
 }
@@ -430,48 +454,81 @@ async function groupJoinGroup(joiningGroupId, joinedGroupId) {
 
 function assignChild(parentSpaceId, childSpaceId) {
   setTimeout(() => {
-    client.sendStateEvent(
-      parentSpaceId,
-      "m.space.child",
-      {
-        via: ["matrix.icoo.org"],
-      },
-      childSpaceId,
-    );
-  }, 10000);
-  console.log("assigned child");
+    try {
+      client.sendStateEvent(
+        parentSpaceId,
+        "m.space.child",
+        {
+          via: ["matrix.icoo.org"],
+        },
+        childSpaceId,
+      );
+      console.log("assigned child");
+    } catch (error) {
+      setTimeout(() => {
+        client.sendStateEvent(
+          parentSpaceId,
+          "m.space.child",
+          {
+            via: ["matrix.icoo.org"],
+          },
+          childSpaceId,
+        );
+        console.log("assigned child");
+      }, 2000);
+    }
+  }, 5000);
 }
 
 function assignParent(childSpaceId, parentSpaceId) {
   setTimeout(() => {
-    client.sendStateEvent(
-      childSpaceId,
-      "m.space.parent",
-      {
-        canonical: true,
-        via: ["matrix.icoo.org"],
-      },
-      parentSpaceId,
-    );
-    console.log("assigned parent");
-  }, 10000);
+    try {
+      client.sendStateEvent(
+        childSpaceId,
+        "m.space.parent",
+        {
+          canonical: true,
+          via: ["matrix.icoo.org"],
+        },
+        parentSpaceId,
+      );
+      console.log("assigned parent");
+    } catch (error) {
+      setTimeout(() => {
+        client.sendStateEvent(
+          childSpaceId,
+          "m.space.parent",
+          {
+            canonical: true,
+            via: ["matrix.icoo.org"],
+          },
+          parentSpaceId,
+        );
+        console.log("assigned parent");
+      }, 2000);
+    }
+  }, 5000);
 }
 
 function assignParentAndChild(parentSpaceId, childSpaceId) {
+  // Assigning child has to happen before assigning parent
+  // because of server permissions.
   setTimeout(() => {
-    assignChild(parentSpaceId, childSpaceId);
+    try {
+      assignChild(parentSpaceId, childSpaceId);
+    } catch (error) {
+      assignChild(parentSpaceId, childSpaceId);
+    }
+    try {
+      assignParent(childSpaceId, parentSpaceId);
+    } catch (error) {
+      assignParent(childSpaceId, parentSpaceId);
+    }
   }, 10000);
-  setTimeout(() => {
-    assignParent(childSpaceId, parentSpaceId);
-  }, 10000);
-  return true;
 }
 
 function joinRooms(roomIdArray) {
   roomIdArray.forEach((roomId) => {
-    setTimeout(() => {
-      console.log("timeouting");
-    }, 10000);
     if (typeof roomId == String) {
       client.joinRoom(roomId);
       console.log("joined " + roomId);
@@ -482,6 +539,13 @@ function joinRooms(roomIdArray) {
   });
 }
 
+async function createSubGroup(topic, groupSpaceId) {
+  let subGroupId = await createRealGroup("subgroup", topic);
+  console.log(subGroupId);
+  console.log("meh");
+  fiveSecTimeout(assignParentAndChild(groupSpaceId, subGroupId));
+}
+
 async function createRealGroup(groupName, topic, visibility = "public") {
   let mainSpaceId = await createSpace(
     groupName,
@@ -490,35 +554,31 @@ async function createRealGroup(groupName, topic, visibility = "public") {
   let chatSpaceId = await createSpace(
     "chat",
     '{"text": "chat", "banner": "group"}',
+    visibility,
   );
   let boardSpaceId = await createSpace(
     "board",
     '{"text": "board", "banner": "group"}',
+    visibility,
   );
   let calendarSpaceId = await createSpace(
     "groups",
     '{"text": "groups", "banner": "group"}',
+    visibility,
   );
   let memberGroupsSpaceId = await createSpace(
     "memberGroups",
     '{"text": "membergroups", "banner": "group"}',
+    visibility,
   );
-  setTimeout(() => {
-    assignParentAndChild(mainSpaceId, chatSpaceId);
-  }, 10000);
-  setTimeout(() => {
-    assignParentAndChild(mainSpaceId, boardSpaceId);
-  }, 10000);
-  setTimeout(() => {
-    assignParentAndChild(mainSpaceId, calendarSpaceId);
-  }, 10000);
-  setTimeout(() => {
-    assignParentAndChild(mainSpaceId, memberGroupsSpaceId);
-  }, 10000);
+  fiveSecTimeout(assignParentAndChild(mainSpaceId, chatSpaceId));
+  fiveSecTimeout(assignParentAndChild(mainSpaceId, boardSpaceId));
+  fiveSecTimeout(assignParentAndChild(mainSpaceId, calendarSpaceId));
+  tenSecTimeout(assignParentAndChild(mainSpaceId, memberGroupsSpaceId));
   return mainSpaceId;
 }
 
-async function createSubGroup(topic, parentGroupId) {
+async function createSubpGroup(topic, parentGroupId) {
   let subGroupId = await createRealGroup("subgroup", topic, "private");
   assignParentAndChild(parentGroupId, subGroupId);
   return;
@@ -558,18 +618,8 @@ async function getMessages(roomId) {
       // Do something with the timeline, such as render it in a chat interface
     })
     .catch((error) => {
-      console.error(`Error fetching initial sync for room ${roomId}: ${error}`);
+      //console.error(`Error fetching initial sync for room ${roomId}: ${error}`);
     });
-}
-
-function sendMessage(roomId, message) {
-  const content = {
-    body: "A hobbit trying to scale mount everest",
-    msgtype: "m.text",
-  };
-  client.sendEvent("roomId", "m.room.message", content, "", (err, res) => {
-    console.log(err);
-  });
 }
 
 function updateTimeline(roomId) {
@@ -606,7 +656,7 @@ async function getChildRoomsOfSpace(matrixClient, spaceId) {
     );
     return childRooms;
   } catch (error) {
-    console.error("Error fetching child rooms:", error);
+    //console.error("Error fetching child rooms:", error);
     return [];
   }
 }
@@ -657,6 +707,7 @@ export const useMatrixClient = defineStore("matrix-client", {
       createPost,
       createSubGroup,
       joinRooms,
+      getAllPublicSpaces,
     };
   },
   getters: {

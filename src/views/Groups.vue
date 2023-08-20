@@ -10,21 +10,20 @@
           @ionChange="segmentChanged($event)"
           v-model="view.value"
         >
-          <IonSegmentButton value="Discover"> Discover </IonSegmentButton>
+          <IonSegmentButton value="discover"> Discover </IonSegmentButton>
           <IonSegmentButton value="joined"> Joined </IonSegmentButton>
           <IonSegmentButton value="invites"> Invites </IonSegmentButton>
           <IonSegmentButton value="kickstart"> Kickstarters </IonSegmentButton>
-          <IonItem>
-            <IonIcon :icon="menu" />
-          </IonItem>
         </IonSegment>
+        <IonIcon :icon="menu" />
       </IonItem>
+      <div v-if="view.value == 'discover'">{{ publicGroups["2"] }}</div>
       <div v-if="view.value == 'joined'">
         <div v-for="(value, name) in groups" :key="name">
           <div
             v-if="
               value.type === 'm.space' &&
-              value.name !== 'internal_groups' &&
+              value.name !== 'subgroup' &&
               value.name !== 'board' &&
               value.name !== 'groups' &&
               value.name !== 'chat' &&
@@ -142,10 +141,10 @@ import { useScroll } from "@vueuse/core";
 const client = useMatrixClient();
 
 let content = reactive({
-  content: "joined",
+  content: "discover",
 });
 let view = reactive({
-  value: "joined",
+  value: "discover",
 });
 let groups = reactive({});
 let group = reactive({
@@ -154,10 +153,11 @@ let group = reactive({
   topic: "",
   type: "",
 });
+let publicSpaces = ref({});
+let publicGroups = ref({});
 
 setInterval(() => {
   Object.assign(groups, client.getGroups());
-  console.log(groups);
   if (Object.keys(groups).length !== 0 && content.content !== "group") {
     content.content = "list";
   }
@@ -210,10 +210,12 @@ export default defineComponent({
   },
   data() {
     return {
-      group: group,
-      groups: groups,
-      content: content,
-      view: view,
+      group,
+      groups,
+      content,
+      view,
+      publicSpaces,
+      publicGroups,
     };
   },
   methods: {
@@ -231,7 +233,6 @@ export default defineComponent({
     },
     segmentChanged(event) {
       view.value = event.detail.value;
-      console.log(view.value);
     },
   },
   created() {
@@ -242,6 +243,13 @@ export default defineComponent({
         if (Object.keys(groups).length !== 0 && content.content !== "group") {
           content.content = "list";
         }
+        console.log(groups);
+        setInterval(() => {
+          client.getAllPublicSpaces().then((response) => {
+            this.publicSpaces = response;
+            Object.assign(this.publicGroups, response);
+          });
+        }, 2000);
       },
       // fetch the data when the view is created and the data is
       // already being observed

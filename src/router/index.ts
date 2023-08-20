@@ -54,6 +54,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'welcome',
         component: () => import('@/views/WelcomePage.vue')
+        },
+      {
+        path: 'material',
+        component: () => import('@/views/Material.vue')
       },
     ]
   }

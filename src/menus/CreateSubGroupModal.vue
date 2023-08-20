@@ -1,5 +1,3 @@
-
-
 <template>
   <IonHeader>
     <IonToolbar>
@@ -18,10 +16,10 @@
       <IonInput v-model="name" placeholder="Name"></IonInput>
       <IonInput v-model="topic" placeholder="Description"></IonInput>
     </IonItem>
-      <IonLabel position="stacked">Start</IonLabel>
-        <IonDatetime></IonDatetime>
-      <IonLabel position="stacked">End</IonLabel>
-        <IonDatetime></IonDatetime>
+    <IonLabel position="stacked">Start</IonLabel>
+    <IonDatetime></IonDatetime>
+    <IonLabel position="stacked">End</IonLabel>
+    <IonDatetime></IonDatetime>
   </IonContent>
 </template>
 
@@ -40,16 +38,16 @@ import {
   modalController,
   IonCheckbox,
   IonDatetime,
-} from '@ionic/vue';
-import {defineComponent} from 'vue';
-import {useMatrixClient} from '@/stores/MatrixClient.js';
+} from "@ionic/vue";
+import { defineComponent } from "vue";
+import { useMatrixClient } from "@/stores/MatrixClient.js";
 
-const client = useMatrixClient()
+const client = useMatrixClient();
 
-let checked = false
+let checked = false;
 
 export default defineComponent({
-  name: 'CreateSubGroupModal',
+  name: "CreateSubGroupModal",
   components: {
     IonContent,
     IonHeader,
@@ -64,8 +62,8 @@ export default defineComponent({
   },
   data() {
     return {
-      name: '',
-      topic: '',
+      name: "",
+      topic: "",
     };
   },
   props: {
@@ -73,11 +71,11 @@ export default defineComponent({
   },
   methods: {
     cancel() {
-      return modalController.dismiss(null, 'cancel');
+      return modalController.dismiss(null, "cancel");
     },
     confirm() {
       //client.createSubGroup(this.name, this.topic)
-      return modalController.dismiss(this.name, 'confirm');
+      return modalController.dismiss(this.name, "confirm");
     },
   },
 });

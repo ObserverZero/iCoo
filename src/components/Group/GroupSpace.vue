@@ -1,7 +1,14 @@
 <template>
-  <SmallGroupItem name="Nothing to be done" topic="Emptyness. Nothing to be done."/>
-
-  <div>{{ groups }}</div>
+  <div v-for="(value, name) in groups.children" :key="name">
+    <SmallGroupItem
+      :name="value.name"
+      :id="value.id"
+      :topic="value.topic.text"
+      :handle="value.handle"
+      :href="value.href"
+      :banner="value.topic.banner"
+    />
+  </div>
 
   <IonFab slot="fixed" vertical="bottom" horizontal="end">
     <IonFabButton color="dark" @click="createSomeSubgroup">
@@ -24,21 +31,21 @@ import {
   IonFab,
   IonFabButton,
   modalController,
-} from '@ionic/vue';
-import {defineComponent, reactive, ref} from 'vue';
+} from "@ionic/vue";
+import { defineComponent, reactive, ref } from "vue";
 import { useMatrixClient } from "@/stores/MatrixClient";
-import { chatbox, calendarClear } from 'ionicons/icons';
-import SmallGroupItem from '@/components/SmallGroupItem.vue'
-import CreateSubGroupModal from '@/menus/CreateSubGroupModal.vue'
+import { chatbox, calendarClear } from "ionicons/icons";
+import SmallGroupItem from "@/components/SmallGroupItem.vue";
+import CreateSubGroupModal from "@/menus/CreateSubGroupModal.vue";
 
-const client = useMatrixClient()
+const client = useMatrixClient();
 
 export default {
   name: "GroupSpace",
   setup() {
     return {
       calendarClear,
-    }
+    };
   },
   components: {
     IonCardSubtitle,
@@ -62,17 +69,28 @@ export default {
         component: CreateSubGroupModal,
         componentProps: {
           groupSpaceId: this.groups.id,
-        }
+        },
       });
       return await modal.present();
     },
     async createSomeSubgroup() {
-      client.createSubGroup("something ado", this.groups.id)
+      client.createSubGroup("something ado", this.groups.id);
     },
-  }
-}
-
+  },
+  created() {
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        setInterval(() => {
+          return;
+        }, 2000);
+      },
+      {
+        immediate: true,
+      },
+    );
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

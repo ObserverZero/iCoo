@@ -80,9 +80,9 @@
           <IonIcon :icon="peopleCircle" size="large" />
         </IonTabButton>
 
-        <IonTabButton tab="material" href="/tabs/people">
+        <!-- - <IonTabButton tab="material" href="/tabs/material">
           <IonIcon :icon="cube" size="large" />
-        </IonTabButton>
+        </IonTabButton> -->
       </IonTabBar>
     </IonTabs>
   </IonPage>

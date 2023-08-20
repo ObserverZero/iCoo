@@ -18,13 +18,24 @@
               </IonCol>
               <IonCol>
                 <IonList>
-                  <IonRow><div @click="something">Members</div></IonRow>
                   <IonRow
-                    ><div @click="somethingelse">Member Groups</div></IonRow
+                    ><div @click="something">
+                      Members <Button> Invite</Button>
+                    </div></IonRow
+                  >
+                  <IonRow
+                    ><div @click="somethingelse">
+                      Member Groups <Button> Invite Group</Button>
+                    </div></IonRow
                   >
                   <IonRow
                     ><div @click="somethingcompletelydifferent">
-                      Group Memberships
+                      Group Memberships <Button> Join Group</Button>
+                    </div></IonRow
+                  >
+                  <IonRow
+                    ><div @click="somethingcompletelydifferent">
+                      Map <Button> View</Button>
                     </div></IonRow
                   >
                 </IonList>
@@ -38,7 +49,7 @@
           v-model="content.content"
         >
           <IonSegmentButton value="groups">
-            <IonIcon :icon="calendarClear" color="tertiary" />
+            <IonIcon :icon="colorFilterSharp" color="tertiary" />
           </IonSegmentButton>
           <IonSegmentButton value="chat">
             <IonIcon :icon="chatbox" color="tertiary" />
@@ -102,6 +113,7 @@ import {
   clipboard,
   calendarClear,
   colorFilterSharp,
+  cube,
 } from "ionicons/icons";
 import { defineComponent, reactive, ref } from "vue";
 import { useMatrixClient } from "@/stores/MatrixClient";
@@ -133,6 +145,7 @@ export default defineComponent({
       chatbox,
       add,
       colorFilterSharp,
+      cube,
     };
   },
   data() {
@@ -148,7 +161,7 @@ export default defineComponent({
       content: "chat",
     });
     let messages = ref({});
-    let groups = ref({});
+    let groups = ref({ id: "skdla" });
     address = "!" + this.$route.params.id + ":matrix.icoo.org";
     return {
       room,
@@ -242,7 +255,6 @@ export default defineComponent({
           children = client.getGroupContent(address);
           this.messages = client.getChatContent(id);
           this.groups = client.getSubgroupContent(id);
-          console.log(this.messages);
         } catch {
           return;
         }
