@@ -1,8 +1,5 @@
 <template @click="onClick">
   <IonCard>
-    <div v-if="topic.banner != Object">
-      <img alt="hacker factory" :src="getImgUrl(banner)"/>
-    </div>
     <IonCardHeader>
       <IonCardTitle>{{ name }}</IonCardTitle>
       <IonCardSubtitle>&{{ handle }}</IonCardSubtitle>
@@ -28,7 +25,7 @@ let content = ref('')
 
 
 export default {
-  name: "KickstartItem",
+  name: "DiscoveryGroupItem",
   setup() {
     return {
       planet,
@@ -71,6 +68,5 @@ export default {
 }
 
 </script>
-
 <style scoped>
 </style>

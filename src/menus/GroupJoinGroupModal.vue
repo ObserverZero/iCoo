@@ -101,7 +101,6 @@ export default defineComponent({
     };
   },
   data() {
-    let updated = client.updateChat(this.$props.message.id);
     let alternateTimeline = ref({});
     return {
       text: "",

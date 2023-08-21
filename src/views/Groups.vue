@@ -17,7 +17,29 @@
         </IonSegment>
         <IonIcon :icon="menu" />
       </IonItem>
-      <div v-if="view.value == 'discover'">{{ publicGroups["2"] }}</div>
+      <div v-if="view.value == 'discover'">
+        <div v-for="(key, value) in publicGroups" :key="value">
+          <div
+            v-if="
+              key.room_type === 'm.space' &&
+              key.name !== 'subgroup' &&
+              key.name !== 'board' &&
+              key.name !== 'groups' &&
+              key.name !== 'chat' &&
+              key.name !== 'memberGroups'
+            "
+          >
+            <DiscoverGroupItem
+                :name="key.name"
+                :topic="key.topic"
+                :handle="key.room_id"
+            />
+            <div>
+              {{ key }}
+            </div>
+          </div>
+        </div>
+      </div>
       <div v-if="view.value == 'joined'">
         <div v-for="(value, name) in groups" :key="name">
           <div
@@ -64,7 +86,7 @@
           name="iCoo initiative"
           id="icoo"
           topic="Initiative to amake an app for self organising.
-                 Need hackers and UX people"
+                 Need hackers, UX people and wonderful persons."
           handle="icooinitiative"
           href="something"
           banner="hacker_factory_semi_B&W"
@@ -130,6 +152,7 @@ import {
 } from "ionicons/icons";
 import { useMatrixClient } from "../stores/MatrixClient.js";
 import GroupItem from "@/components/GroupItem.vue";
+import DiscoverGroupItem from "@/components/DiscoverGroupItem.vue";
 import KickstartItem from "@/components/KickstartItem.vue";
 import CreateGroupModal from "@/menus/CreateGroupModal.vue";
 import { useScroll } from "@vueuse/core";
@@ -140,9 +163,7 @@ import { useScroll } from "@vueuse/core";
 
 const client = useMatrixClient();
 
-let content = reactive({
-  content: "discover",
-});
+let content = reactive({ content: "discover" });
 let view = reactive({
   value: "discover",
 });
@@ -188,6 +209,7 @@ export default defineComponent({
     IonSegment,
     IonSegmentButton,
     KickstartItem,
+    DiscoverGroupItem,
   },
   setup() {
     return {
